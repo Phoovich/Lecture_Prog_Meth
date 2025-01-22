@@ -163,3 +163,295 @@ public class Main {
 ```
 
 ---
+
+## Class
+
+> class contains 2 main components:
+
+1. data (attributes/propertyk)
+2. method
+
+   - Constructor is a special method to create clss
+
+   ```java
+   public class Dice {
+       //1. attributes
+       final static int MAX = 6;
+       int facevalue;
+
+       //2. Method
+
+       //2.1 Constructor
+       public SimpleDice(int facevalue){
+           this.facevalue = facevalue;
+       }
+
+       // 2.2 ohter Method
+       public int roll(){
+           facevalue = (int) (Math.randonm() * MAX) +1;
+           return facevalue;
+       }
+
+   }
+
+   ```
+
+### How new work
+
+```java
+SimpleDice diceA = new SimpleDice(1);
+/*
+- variable store address suppose address 700;
+- diceA.facevalue = 1;
+- diceA ---> address 700;
+*/
+SimpleDice diceB;
+// diceB ---- null
+
+diceB = diceA
+/*
+now diceB point same address diceA
+- diceA ---> address 700
+- diceB ---> address 700
+- diceA.facevalue = 1;
+- diceB.facevalue = 1;
+*/
+
+diceB.facevalue = 5;
+
+/*
+now diceB point same address diceA
+- diceA ---> address 700
+- diceB ---> address 700
+- diceA.facevalue = 5;
+- diceB.facevalue = 5;
+*/
+```
+
+---
+
+### Method Overloading
+
+#### Method sigature
+
+- **name** + **arguments list**
+
+```java
+add(int m,int n) ---> add(int,int)
+add(doudle m,doudle n) ---> add(doudle,doudle)
+add(int x,int y,int z) ---> add(int,int,int)
+// same name different arguments list
+
+```
+
+---
+
+### **Constructor**
+
+1. The constructor has the **same name as the class**.
+2. Constructors **do not have a return type**.
+
+#### **Example: Constructor in Java**
+
+```java
+public class Dice {
+    // Constructor with a parameter
+    public Dice(int faceValue) {
+        this.faceValue = faceValue; // Assign user-provided value
+    }
+
+    // Default constructor
+    public Dice() {
+        this.faceValue = 1; // Assign a default value
+    }
+}
+
+```
+
+---
+
+### **Keyword: `this`**
+
+```java
+public SimpleDice(int faceValue) {
+    this.faceValue = faceValue;
+    // Explanation:
+    // 1. `this.faceValue` refers to the `faceValue` property of the class.
+    // 2. `faceValue` refers to the parameter provided by the user.
+}
+```
+
+---
+
+### **Keyword: `final`**
+
+- The `final` keyword is used to **prevent modification** of variables, methods, or classes.
+- Often used with **constants** to ensure their values remain unchanged.
+
+#### **Example: Using `final` in Java**
+
+```java
+public class SimpleDice {
+    // A constant value that cannot be changed
+    final static int MAX = 6;
+    int faceValue;
+
+    public SimpleDice(int faceValue) {
+        // this.MAX = 7; // Not allowed: final variables cannot be reassigned
+        this.faceValue = faceValue;
+    }
+}
+```
+
+---
+
+### **Keyword: `static`**
+
+- this variable belong to class not belong to object
+
+```java
+public class SimpleDice {
+    static int count = 0;
+    final static int MAX = 6;
+}
+
+public class SimpleDiceTest1{
+    public static void main(String[] args){
+        SimpleDice diceA = new SimpleDice(1);
+        SimpleDice diceB = new SimpleDice(5);
+        SimpleDice diceC = new SimpleDice();
+
+        system.out.println(diceB.facevalue);
+        system.out.println(diceC.facevalue);
+        // System.out.println(SimpleDice.faceValue);  --> error
+
+        System.out.println(SimpleDice.count); // print 0
+        System.out.println(diceA.count); // print 0
+
+        diceB.count = 1;
+        System.out.println(SimpleDice.count); // print 1
+        System.out.println(diceC.count); // print 1
+    }
+}
+```
+
+1. object variable ---> faceValue
+
+   - ไม่สามารถเรียกผ่าน class ได้
+
+2. class variable ---> count (statice)
+   - สามารถเรียกผ่าน class ได้โดยตรง
+   - ทุกๆ object แชร์ตัวแปรตัวนี้กัน
+   - constant variable --> `final static` and cappitalize
+
+---
+
+## Method and more details
+
+### Access modifiers
+
+| **Specifier**         | **Class** | **Package** | **Subclass** | **World** | **UML Symbol** |
+| --------------------- | :-------: | :---------: | :----------: | :-------: | :------------: |
+| **private**           |    ✅     |             |              |           |      `-`       |
+| **package** (default) |    ✅     |     ✅      |              |           |      `~`       |
+| **protected**         |    ✅     |     ✅      |      ✅      |           |      `#`       |
+| **public**            |    ✅     |     ✅      |      ✅      |    ✅     |      `+`       |
+
+### Encapsulation
+
+- Information Hiding
+- property ใน class จะไม่ยอมให้ access โดยตรง (ใช้ rivate)
+- สามารถ เข้าถึงได้ผ่าน getter (mutator),setter (accessor) method
+  - setter --> setXXX
+  - getter --> getXXX
+
+```java
+// setter
+public void setFacevalue(int faceValue){
+    this.faceValue = Math.max(0,Math.min(MAX, faceValue))
+}
+//getter
+public void getFacevalue(){
+    return this.faceValue;
+}
+
+public static void main(String[] args)
+    SimpleDice diceA = new SimpleDice();
+    diceA.setFacevalue(100);
+    System.out.println(diceA.getFacevalue()); // print 6
+```
+
+---
+
+### `toString()`
+
+```java
+class SimpleDice{
+    public to String toString(){
+        return "The face is " + this.faceValue;
+    }
+}
+
+public static void  main(String[] atgss){
+    SimpleDice diceA = new SimpleDice(5);
+    System.out.println(diceA); } // print The face is 5;
+// if not have toString() print @xxxxxxxx(address)
+
+```
+
+### `equals()`
+
+```java
+  public static void main(String[] args) {
+    SimpleDice diceA = new SimpleDice(1);
+    SimpleDice diceB = new SimpleDice(1);
+
+    System.out.println(diceA == diceB); // false
+    /*
+    diceA store address @xxxxxxxx
+    diceB store address @yyyyyyyy
+
+    if you want compair use method equals();
+    */
+  }
+```
+
+#### Method equals
+
+```java
+    public boolean equals(Object o){
+        SimpleDice ohterDice = (SimpleDice) o;
+        if(this.faceValue == otherDice.faceValue)
+            return true;
+        else
+            return false
+    }
+
+
+  public static void main(String[] args) {
+    SimpleDice diceA = new SimpleDice(1);
+    SimpleDice diceB = new SimpleDice(1);
+
+    System.out.println(diceA.equals(diceB)); // true
+
+  }
+```
+
+---
+
+### Does `equals` Work as Expected?
+
+| **Property**   | **Description**                                                                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Reflexive**  | For any non-null reference value `x`, `x.equals(x)` should return `true`.                                                                                       |
+| **Symmetric**  | For any non-null reference values `x` and `y`, `x.equals(y)` should return `true` if and only if `y.equals(x)` also returns `true`.                             |
+| **Transitive** | If `x.equals(y)` returns `true` and `y.equals(z)` returns `true`, then `x.equals(z)` should also return `true`.                                                 |
+| **Consistent** | For any non-null reference values `x` and `y`, multiple calls to `x.equals(y)` should consistently return the same result, provided no information is modified. |
+| **Non-null**   | For any non-null reference value `x`, `x.equals(null)` should return `false`.                                                                                   |
+
+---
+
+### Notes:
+
+- The `equals` method must be implemented to adhere to these properties.
+- Proper implementation ensures reliable behavior when using `equals` for object comparisons.
